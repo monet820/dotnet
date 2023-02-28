@@ -6,6 +6,8 @@
         <Nullable>enable</Nullable>
 
         <IsPackable>false</IsPackable>
+
+        <RootNamespace>template.integration.tests</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
