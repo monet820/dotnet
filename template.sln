@@ -8,7 +8,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{8363B932
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Customer.Api.tests.Integration", "tests\Customer.Api.tests.Integration\Customer.Api.tests.Integration.csproj", "{4E0FE4F1-767A-4015-8D62-B827275B0CFC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Customer.Api", "src\Customer.Api\Customer.Api.csproj", "{BA11CD5C-4064-493D-9D5E-15BBD85BD789}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Customers.Api", "src\Customers.Api\Customers.Api.csproj", "{BA11CD5C-4064-493D-9D5E-15BBD85BD789}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
