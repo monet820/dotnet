@@ -30,8 +30,8 @@ public class CustomerApiFactory : WebApplicationFactory<IApiMarker>, IAsyncLifet
         .WithDatabase(new PostgreSqlTestcontainerConfiguration
         {
             Database = "mydb",
-            Username = "postgres",
-            Password = "postgres"
+            Username = "course",
+            Password = "changeme"
         })
         .Build();
     
