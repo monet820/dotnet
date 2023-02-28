@@ -14,8 +14,7 @@ public class DatabaseInitializer
     {
         using var connection = await _connectionFactory.CreateConnectionAsync();
         await connection.ExecuteAsync(@"CREATE TABLE IF NOT EXISTS Customers (
-        Id UUID PRIMARY KEY, 
-        GitHubUsername TEXT NOT NULL,
+        Id UUID PRIMARY KEY,
         FullName TEXT NOT NULL,
         Email TEXT NOT NULL,
         DateOfBirth TEXT NOT NULL)");

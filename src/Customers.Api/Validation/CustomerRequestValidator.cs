@@ -9,7 +9,6 @@ public class CustomerRequestValidator : AbstractValidator<CustomerRequest>
     {
         RuleFor(x => x.FullName).NotEmpty();
         RuleFor(x => x.Email).NotEmpty();
-        RuleFor(x => x.GitHubUsername).NotEmpty();
         RuleFor(x => x.DateOfBirth).NotEmpty();
     }
 }

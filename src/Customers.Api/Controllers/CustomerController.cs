@@ -20,11 +20,11 @@ public class CustomerController : ControllerBase
     public async Task<IActionResult> Create([FromBody] CustomerRequest request)
     {
         var customer = request.ToCustomer();
-
+        
         await _customerService.CreateAsync(customer);
-
+        
         var customerResponse = customer.ToCustomerResponse();
-
+        
         return CreatedAtAction("Get", new { customerResponse.Id }, customerResponse);
     }
 

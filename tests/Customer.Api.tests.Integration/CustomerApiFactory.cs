@@ -14,18 +14,19 @@ namespace template.integration.tests;
 
 public class CustomerApiFactory : WebApplicationFactory<IApiMarker>, IAsyncLifetime
 {
-    // // can be anything, postgres, redis, elasticsearch and more.
+    // can be anything, postgres, redis, elasticsearch and more.
+ 
+    // Collection!
     // private readonly DockerContainer _postgresDatabaseContainer = new ContainerBuilder<DockerContainer>()
     //         .WithImage("postgres:11-alpine")
-    //         .WithEnvironment("POSTGRES_USER", "postgres")
-    //         .WithEnvironment("POSTGRES_PASSWORD", "postgres")
+    //         .WithEnvironment("POSTGRES_USER", "course")
+    //         .WithEnvironment("POSTGRES_PASSWORD", "changeme")
     //         .WithEnvironment("POSTGRES_DB", "mydb")
-    //         .WithPortBinding(5555, 5432)
+    //         .WithPortBinding(5432, 5432)
     //         .WithWaitStrategy(Wait.ForUnixContainer().UntilPortIsAvailable(5432))
     //         .Build();
-    //
-
-    // Random port
+    
+    // Multiple.
     private readonly TestcontainerDatabase _dbContainer = new ContainerBuilder<PostgreSqlTestcontainer>()
         .WithDatabase(new PostgreSqlTestcontainerConfiguration
         {
@@ -45,8 +46,9 @@ public class CustomerApiFactory : WebApplicationFactory<IApiMarker>, IAsyncLifet
         builder.ConfigureTestServices(collection =>
         {
             collection.RemoveAll(typeof(IDbConnectionFactory));
+           
             // collection.AddSingleton<IDbConnectionFactory>(_ => new NpgsqlConnectionFactory(
-            //     "Server=localhost;Port=5555;Database=mydb;User ID=postgres;Password=postgres;"
+            //     "Server=localhost;Port=5432;Database=mydb;User ID=course;Password=changeme;"
             //     ));
 
             collection.AddSingleton<IDbConnectionFactory>(_ =>

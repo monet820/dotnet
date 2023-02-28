@@ -12,7 +12,6 @@ public static class DtoToDomainMapper
         {
             Id = CustomerId.From(customerDto.Id),
             Email = Email.From(customerDto.Email),
-            GitHubUsername = GitHubUsername.From(customerDto.GitHubUsername),
             FullName = FullName.From(customerDto.FullName),
             DateOfBirth = DateOfBirth.From(DateOnly.FromDateTime(customerDto.DateOfBirth))
         };
