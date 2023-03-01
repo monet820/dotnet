@@ -20,9 +20,6 @@ public class TestBase : IAsyncLifetime
     {
         Client = customerApiFactory.HttpClient;
         _resetDatabase = customerApiFactory.ResetDatabase;
-
-        // This constructor is called before any test.
-        // Database cleanup
     }
 
     public Task InitializeAsync() => Task.CompletedTask;
