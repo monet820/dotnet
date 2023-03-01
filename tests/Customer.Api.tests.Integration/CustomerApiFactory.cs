@@ -1,7 +1,6 @@
 using Customers.Api;
 using Customers.Api.Database;
 using DotNet.Testcontainers.Builders;
-using DotNet.Testcontainers.Configurations;
 using DotNet.Testcontainers.Containers;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -50,8 +49,7 @@ public class CustomerApiFactory : WebApplicationFactory<IApiMarker>, IAsyncLifet
             // Remove the one added by Program.
             // collection.AddSingleton<IDbConnectionFactory>(_ =>
             //     new NpgsqlConnectionFactory(_dbContainer.ConnectionString));
-            
-            
+
             collection.RemoveAll(typeof(IDbConnectionFactory));
             collection.AddSingleton<IDbConnectionFactory>(_ => new NpgsqlConnectionFactory(
                 "Server=localhost;Port=5555;Database=mydb;User ID=course;Password=changeme;"

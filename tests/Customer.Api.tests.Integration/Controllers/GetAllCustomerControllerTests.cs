@@ -1,47 +1,38 @@
-using Customers.Api.Contracts.Requests;
 using Customers.Api.Contracts.Responses;
 
 namespace template.integration.tests.Controllers;
 
-[Collection(nameof(CustomerApiFactoryTestCollection))]
-public class GetAllCustomerControllerTests
+public class GetAllCustomerControllerTests : TestBase
 {
-    private readonly HttpClient _client;
-    
-    private readonly Faker<CustomerRequest> _customerGenerator = new Faker<CustomerRequest>()
-        .RuleFor(x => x.Email, faker => faker.Person.Email)
-        .RuleFor(x => x.FullName, faker => faker.Person.FullName)
-        .RuleFor(x => x.DateOfBirth, faker => faker.Person.DateOfBirth.Date);
-    
-    public GetAllCustomerControllerTests(CustomerApiFactory customerApiFactory)
+    public GetAllCustomerControllerTests(CustomerApiFactory customerApiFactory) : base(customerApiFactory)
     {
-        _client = customerApiFactory.CreateClient();
+        
     }
     
     [Fact]
     public async Task GetAll_Returns_All_Customers_When_Exists()
     {
         // ARRANGE
-        var customer = _customerGenerator.Generate();
-        var createdResponse = await _client.PostAsJsonAsync("Customers", customer);
+        var customer = CustomerGenerator.Generate();
+        var createdResponse = await Client.PostAsJsonAsync("Customers", customer);
         var createdCustomer = await createdResponse.Content.ReadFromJsonAsync<CustomerResponse>();
         
         // ACT
-        var response = await _client.GetAsync($"customers/");
+        var response = await Client.GetAsync($"customers/");
 
         // ASSERT
         response.StatusCode.Should().Be(HttpStatusCode.OK);
         var retrievedCustomers = await response.Content.ReadFromJsonAsync<GetAllCustomersResponse>();
         retrievedCustomers!.Customers.Single().Should().BeEquivalentTo(createdCustomer);
         
-        await _client.DeleteAsync($"customers/{createdCustomer!.Id}");
+        await Client.DeleteAsync($"customers/{createdCustomer!.Id}");
     }
     
     [Fact]
     public async Task GetAll_Returns_Empty_List_When_No_Customers_Exist()
     {
         // ACT
-        var response = await _client.GetAsync($"customers/");
+        var response = await Client.GetAsync($"customers/");
 
         // ASSERT
         response.StatusCode.Should().Be(HttpStatusCode.OK);

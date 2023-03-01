@@ -1,33 +1,24 @@
-using Customers.Api.Contracts.Requests;
 using Customers.Api.Contracts.Responses;
 
 namespace template.integration.tests.Controllers;
 
-[Collection(nameof(CustomerApiFactoryTestCollection))]
-public class GetCustomerControllerTests
+public class GetCustomerControllerTests : TestBase
 {
-    private readonly HttpClient _client;
-    
-    private readonly Faker<CustomerRequest> _customerGenerator = new Faker<CustomerRequest>()
-        .RuleFor(x => x.Email, faker => faker.Person.Email)
-        .RuleFor(x => x.FullName, faker => faker.Person.FullName)
-        .RuleFor(x => x.DateOfBirth, faker => faker.Person.DateOfBirth.Date);
-    
-    public GetCustomerControllerTests(CustomerApiFactory customerApiFactory)
+    public GetCustomerControllerTests(CustomerApiFactory customerApiFactory) : base(customerApiFactory)
     {
-        _client = customerApiFactory.CreateClient();
+        
     }
 
     [Fact]
     public async Task Get_Return()
     {
         // ARRANGE
-        var customer = _customerGenerator.Generate();
-        var createdResponse = await _client.PostAsJsonAsync("Customers", customer);
+        var customer = CustomerGenerator.Generate();
+        var createdResponse = await Client.PostAsJsonAsync("Customers", customer);
         var createdCustomer = await createdResponse.Content.ReadFromJsonAsync<CustomerResponse>();
         
         // ACT
-        var response = await _client.GetAsync($"customers/{createdCustomer.Id}");
+        var response = await Client.GetAsync($"customers/{createdCustomer.Id}");
 
         // ASSERT
         var retrievedCustomer = await response.Content.ReadFromJsonAsync<CustomerResponse>();
@@ -39,7 +30,7 @@ public class GetCustomerControllerTests
     public async Task Get_Returns_NotFound_WhenCustomerDoesNotExist()
     {
         // ACT
-        var response = await _client.GetAsync($"customers/{Guid.NewGuid()}");
+        var response = await Client.GetAsync($"customers/{Guid.NewGuid()}");
 
         // ASSERT
         response.StatusCode.Should().Be(HttpStatusCode.NotFound);
