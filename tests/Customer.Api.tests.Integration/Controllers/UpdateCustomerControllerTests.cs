@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace template.integration.tests.Controllers;
 
-// [Collection(nameof(CustomerApiFactoryTestCollection))]
-public class UpdateCustomerControllerTests : IClassFixture<CustomerApiFactory>
+[Collection(nameof(CustomerApiFactoryTestCollection))]
+public class UpdateCustomerControllerTests
 {
     private readonly HttpClient _client;
 

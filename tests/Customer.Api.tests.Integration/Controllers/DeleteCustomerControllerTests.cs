@@ -3,8 +3,8 @@ using Customers.Api.Contracts.Responses;
 
 namespace template.integration.tests.Controllers;
 
-// [Collection(nameof(CustomerApiFactoryTestCollection))]
-public class DeleteCustomerControllerTests : IClassFixture<CustomerApiFactory>
+[Collection(nameof(CustomerApiFactoryTestCollection))]
+public class DeleteCustomerControllerTests
 {
     private readonly HttpClient _client;
 
