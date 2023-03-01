@@ -10,6 +10,7 @@ public class CreateCustomerControllerTests : IClassFixture<CustomerApiFactory>
     private readonly CustomerApiFactory _customerApiFactory;
     private readonly HttpClient _client;
 
+    // Bogus
     private readonly Faker<CustomerRequest> _customerGenerator = new Faker<CustomerRequest>()
         .RuleFor(x => x.Email, faker => faker.Person.Email)
         .RuleFor(x => x.FullName, faker => faker.Person.FullName)

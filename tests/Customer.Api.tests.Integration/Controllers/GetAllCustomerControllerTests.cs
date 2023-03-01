@@ -3,8 +3,8 @@ using Customers.Api.Contracts.Responses;
 
 namespace template.integration.tests.Controllers;
 
-// [Collection(nameof(CustomerApiFactoryTestCollection))]
-public class GetAllCustomerControllerTests : IClassFixture<CustomerApiFactory>
+[Collection(nameof(CustomerApiFactoryTestCollection))]
+public class GetAllCustomerControllerTests
 {
     private readonly HttpClient _client;
     
@@ -34,11 +34,7 @@ public class GetAllCustomerControllerTests : IClassFixture<CustomerApiFactory>
         var retrievedCustomers = await response.Content.ReadFromJsonAsync<GetAllCustomersResponse>();
         retrievedCustomers!.Customers.Single().Should().BeEquivalentTo(createdCustomer);
         
-        // Tests share the data, we need to clear it between tests..
-        // Alternative 1.
-        // await _client.DeleteAsync($"customers/{createdCustomer!.Id}");
-        // Alternative 2. -> new docker instance -> new class with IClassFixture<CustomerApiFactory>
-        // Keep it separate from other databases.
+        await _client.DeleteAsync($"customers/{createdCustomer!.Id}");
     }
     
     [Fact]

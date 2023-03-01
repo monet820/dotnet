@@ -14,9 +14,11 @@ namespace template.integration.tests;
 
 public class CustomerApiFactory : WebApplicationFactory<IApiMarker>, IAsyncLifetime
 {
-    // can be anything, postgres, redis, elasticsearch and more.
- 
+    // can be any image! 
+    
     // Collection!
+    // private int port = Random.Shared.next(10000,60000); kinda hacky..
+    
     // private readonly DockerContainer _postgresDatabaseContainer = new ContainerBuilder<DockerContainer>()
     //         .WithImage("postgres:11-alpine")
     //         .WithEnvironment("POSTGRES_USER", "course")
@@ -45,14 +47,14 @@ public class CustomerApiFactory : WebApplicationFactory<IApiMarker>, IAsyncLifet
 
         builder.ConfigureTestServices(collection =>
         {
+            // Remove the one added by Program.
             collection.RemoveAll(typeof(IDbConnectionFactory));
-           
-            // collection.AddSingleton<IDbConnectionFactory>(_ => new NpgsqlConnectionFactory(
-            //     "Server=localhost;Port=5432;Database=mydb;User ID=course;Password=changeme;"
-            //     ));
-
             collection.AddSingleton<IDbConnectionFactory>(_ =>
                 new NpgsqlConnectionFactory(_dbContainer.ConnectionString));
+           
+            collection.AddSingleton<IDbConnectionFactory>(_ => new NpgsqlConnectionFactory(
+                "Server=localhost;Port=5432;Database=mydb;User ID=course;Password=changeme;"
+                ));
         });
     }
 
