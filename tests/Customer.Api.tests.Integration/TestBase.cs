@@ -4,10 +4,12 @@ using Bogus;
 namespace template.integration.tests;
 
 [Collection(nameof(CustomerApiFactoryTestCollection))]
-public class TestBase
+public class TestBase : IAsyncLifetime
 {
     protected readonly HttpClient Client;
-    
+
+    private readonly Func<Task> _resetDatabase;
+
     // Bogus
     protected readonly Faker<CustomerRequest> CustomerGenerator = new Faker<CustomerRequest>()
         .RuleFor(x => x.Email, faker => faker.Person.Email)
@@ -16,9 +18,14 @@ public class TestBase
 
     protected TestBase(CustomerApiFactory customerApiFactory)
     {
-        Client = customerApiFactory.CreateClient();
-        
+        Client = customerApiFactory.HttpClient;
+        _resetDatabase = customerApiFactory.ResetDatabase;
+
         // This constructor is called before any test.
         // Database cleanup
     }
+
+    public Task InitializeAsync() => Task.CompletedTask;
+
+    public Task DisposeAsync() => _resetDatabase();
 }
