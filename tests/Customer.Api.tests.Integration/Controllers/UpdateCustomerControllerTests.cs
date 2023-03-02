@@ -1,36 +1,27 @@
-using Customers.Api.Contracts.Requests;
 using Customers.Api.Contracts.Responses;
 using Microsoft.AspNetCore.Mvc;
 
 namespace template.integration.tests.Controllers;
 
-// [Collection(nameof(CustomerApiFactoryTestCollection))]
-public class UpdateCustomerControllerTests : IClassFixture<CustomerApiFactory>
+public class UpdateCustomerControllerTests : TestBase
 {
-    private readonly HttpClient _client;
-
-    private readonly Faker<CustomerRequest> _customerGenerator = new Faker<CustomerRequest>()
-        .RuleFor(x => x.Email, faker => faker.Person.Email)
-        .RuleFor(x => x.FullName, faker => faker.Person.FullName)
-        .RuleFor(x => x.DateOfBirth, faker => faker.Person.DateOfBirth.Date);
-
-    public UpdateCustomerControllerTests(CustomerApiFactory apiFactory)
+    public UpdateCustomerControllerTests(CustomerApiFactory apiFactory) : base(apiFactory)
     {
-        _client = apiFactory.CreateClient();
+        
     }
 
     [Fact]
     public async Task Update_UpdatesUser_WhenDataIsValid()
     {
         // Arrange
-        var customer = _customerGenerator.Generate();
-        var createdResponse = await _client.PostAsJsonAsync("customers", customer);
+        var customer = CustomerGenerator.Generate();
+        var createdResponse = await Client.PostAsJsonAsync("customers", customer);
         var createdCustomer = await createdResponse.Content.ReadFromJsonAsync<CustomerResponse>();
 
-        customer = _customerGenerator.Generate();
+        customer = CustomerGenerator.Generate();
         
         // Act
-        var response = await _client.PutAsJsonAsync($"customers/{createdCustomer!.Id}", customer);
+        var response = await Client.PutAsJsonAsync($"customers/{createdCustomer!.Id}", customer);
 
         // Assert
         var customerResponse = await response.Content.ReadFromJsonAsync<CustomerResponse>();
@@ -42,16 +33,16 @@ public class UpdateCustomerControllerTests : IClassFixture<CustomerApiFactory>
     public async Task Update_ReturnsValidationError_WhenEmailIsInvalid()
     {
         // Arrange
-        var customer = _customerGenerator.Generate();
-        var createdResponse = await _client.PostAsJsonAsync("customers", customer);
+        var customer = CustomerGenerator.Generate();
+        var createdResponse = await Client.PostAsJsonAsync("customers", customer);
         var createdCustomer = await createdResponse.Content.ReadFromJsonAsync<CustomerResponse>();
         
         const string invalidEmail = "clearlyNotAValidEmail";
-        customer = _customerGenerator.Clone()
+        customer = CustomerGenerator.Clone()
             .RuleFor(x => x.Email, invalidEmail).Generate();
 
         // Act
-        var response = await _client.PutAsJsonAsync($"customers/{createdCustomer!.Id}", customer);
+        var response = await Client.PutAsJsonAsync($"customers/{createdCustomer!.Id}", customer);
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);

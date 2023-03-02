@@ -1,35 +1,23 @@
-using Customers.Api.Contracts.Requests;
 using Customers.Api.Contracts.Responses;
 using Microsoft.AspNetCore.Mvc;
 
 namespace template.integration.tests.Controllers;
 
-// [Collection(nameof(CustomerApiFactoryTestCollection))]
-public class CreateCustomerControllerTests : IClassFixture<CustomerApiFactory>
+public class CreateCustomerControllerTests : TestBase
 {
-    private readonly CustomerApiFactory _customerApiFactory;
-    private readonly HttpClient _client;
-
-    // Bogus
-    private readonly Faker<CustomerRequest> _customerGenerator = new Faker<CustomerRequest>()
-        .RuleFor(x => x.Email, faker => faker.Person.Email)
-        .RuleFor(x => x.FullName, faker => faker.Person.FullName)
-        .RuleFor(x => x.DateOfBirth, faker => faker.Person.DateOfBirth.Date);
-
-    public CreateCustomerControllerTests(CustomerApiFactory customerApiFactory)
+    public CreateCustomerControllerTests(CustomerApiFactory customerApiFactory) : base(customerApiFactory)
     {
-        _customerApiFactory = customerApiFactory;
-        _client = customerApiFactory.CreateClient();
+        
     }
 
     [Fact]
     public async Task Create_Creates_User_WhenDataIsValid()
     {
         // ARRANGE
-        var customer = _customerGenerator.Generate();
+        var customer = CustomerGenerator.Generate();
         
         // ACT
-        var response = await _client.PostAsJsonAsync("/customers", customer);
+        var response = await Client.PostAsJsonAsync("/customers", customer);
         
         // ASSERT
         var customerResponse = await response.Content.ReadFromJsonAsync<CustomerResponse>();
@@ -43,12 +31,12 @@ public class CreateCustomerControllerTests : IClassFixture<CustomerApiFactory>
     {
         // ARRANGE
         const string invalidEmail = "clearlyNotValidEmail";
-        var customer = _customerGenerator.Clone()
+        var customer = CustomerGenerator.Clone()
             .RuleFor(x => x.Email, invalidEmail)
             .Generate();
         
         // ACT
-        var response = await _client.PostAsJsonAsync("/customers", customer);
+        var response = await Client.PostAsJsonAsync("/customers", customer);
         
         // ASSERT
         response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
