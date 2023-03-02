@@ -52,9 +52,9 @@ public class CustomerApiFactory : WebApplicationFactory<IApiMarker>, IAsyncLifet
             collection.AddSingleton<IDbConnectionFactory>(_ =>
                 new NpgsqlConnectionFactory(_dbContainer.ConnectionString));
            
-            collection.AddSingleton<IDbConnectionFactory>(_ => new NpgsqlConnectionFactory(
-                "Server=localhost;Port=5432;Database=mydb;User ID=course;Password=changeme;"
-                ));
+            // collection.AddSingleton<IDbConnectionFactory>(_ => new NpgsqlConnectionFactory(
+            //     "Server=localhost;Port=5432;Database=mydb;User ID=course;Password=changeme;"
+            //     ));
         });
     }
 
